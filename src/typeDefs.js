@@ -11,7 +11,7 @@ const typeDefs = gql`
     id: Int!
     name: String!
     sprites: Sprites!
-    type: [Type!]
+    type: [Type!]!
   }
 
   type NameAndIds {
