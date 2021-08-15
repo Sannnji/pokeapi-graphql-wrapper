@@ -23,6 +23,18 @@ class PokeApi extends RESTDataSource {
     return namesAndIds;
   }
 
+  async getPokeSprites(id) {
+    const response = await this.get(`pokemon/${id}`);
+    return response.sprites;
+  }
+
+  async getPokeIcon(id) {
+    const response = await this.get(`pokemon/${id}`);
+    const version = response.sprites.versions["generation-viii"];
+    const icons = version.icons;
+    return icons;
+  }
+
   async getPokeId(id) {
     const response = await this.get(`pokemon/${id}`);
     return response.id;
@@ -33,17 +45,32 @@ class PokeApi extends RESTDataSource {
     return response.name;
   }
 
-  async getPokeSprites(id) {
-    const response = await this.get(`pokemon/${id}`);
-    return response.sprites;
-  }
-
   async getPokeTypeId(id) {
     const response = await this.get(`pokemon/${id}`);
     const types = response.types;
-    const typeIds = types.map((type) => type.type.name);
+    const typeName = types.map((type) => type.type.name);
+    return typeName;
+  }
 
-    return typeIds
+  async getPokeAbilities(id) {
+    const response = await this.get(`pokemon/${id}`);
+    const abilities = response.abilities;
+    const abilityNames = abilities.map((ability) => ability.ability.name);
+    return abilityNames;
+  }
+
+  async getAttackStat(id) {
+    const response = await this.get(`pokemon/${id}`);
+    const stat = response.stat;
+    const attack = stat.map((stat) => stat.stat.name === "attack");
+    return attack.base_stat;
+  }
+
+  async getDefenseStat(id) {
+    const response = await this.get(`pokemon/${id}`);
+    const stat = response.stat;
+    const Defense = stat.map((stat) => stat.stat.name === "defense");
+    return Defense.base_stat;
   }
 }
 

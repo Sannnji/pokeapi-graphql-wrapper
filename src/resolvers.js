@@ -9,6 +9,9 @@ const resolvers = {
     pokemon: (parent, args, { dataSources }) => {
       return args.id;
     },
+    icons: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getPokeIcon(args.id);
+    },
   },
 
   Pokemon: {
@@ -24,11 +27,30 @@ const resolvers = {
     type: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeTypeId(parent);
     },
+    abilities: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getPokeAbilities(parent);
+    },
+    stats: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getPokeStats(parent);
+    },
   },
 
   Type: {
-    name: (parent, arrgs, { dataSources }) => parent,
+    name: (parent, args, { dataSources }) => parent,
   },
+
+  Abilities: {
+    name: (parent, args, { dataSources }) => parent,
+  },
+
+  //   Icons: {
+  //     front_default: (parent, args, { dataSources }) => {
+  //       return dataSources.pokeApi.getPokeIcon(parent);
+  //     },
+  //     front_female: (parent, args, { dataSources }) => {
+  //       return dataSources.pokeApi.getPokeIcon(parent);
+  //     },
+  //   },
 };
 
 module.exports = { resolvers };
