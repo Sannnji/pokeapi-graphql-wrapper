@@ -31,7 +31,7 @@ const resolvers = {
       return dataSources.pokeApi.getPokeAbilities(parent);
     },
     stats: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getPokeStats(parent);
+      return dataSources.pokeApi.getPokeBaseStats(parent);
     },
   },
 
