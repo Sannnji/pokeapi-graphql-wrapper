@@ -29,7 +29,8 @@ const typeDefs = gql`
     sprites: Sprites!
     type: [Type!]!
     abilities: [Abilities!]!
-    stats: Stats
+    stats: Stats!
+    moves: [Moves]!
   }
 
   type Type {
@@ -50,6 +51,7 @@ const typeDefs = gql`
   }
 
   type Moves {
+    id: Int!
     name: String!
     power: Int!
     accuracy: Int!
@@ -57,7 +59,6 @@ const typeDefs = gql`
     type: String!
     damageClass: String
   }
-
 `;
 
 module.exports = { typeDefs };

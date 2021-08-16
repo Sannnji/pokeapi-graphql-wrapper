@@ -33,6 +33,9 @@ const resolvers = {
     stats: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeBaseStats(parent);
     },
+    moves: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getPokeMoveId(parent);
+    },
   },
 
   Type: {
@@ -41,6 +44,14 @@ const resolvers = {
 
   Abilities: {
     name: (parent, args, { dataSources }) => parent,
+  },
+
+  Moves: {
+    id: (parent, arg, { dataSources }) => parent,
+
+    name: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getPokeMoveName(parent);
+    },
   },
 
   //   Icons: {

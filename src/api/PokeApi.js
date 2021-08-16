@@ -120,6 +120,21 @@ class PokeApi extends RESTDataSource {
     const speed = stats.find((stat) => stat.stat.name === "speed");
     return speed.base_stat;
   }
+
+  async getPokeMoveId(id) {
+    const response = await this.get(`pokemon/${id}`);
+    const move = response.moves;
+    const moveId = move.map((move) => {
+      const id = parseUrl(move.move.url);
+      return id;
+    });
+    return moveId;
+  }
+
+  async getPokeMoveName(moveId) {
+    const response = await this.get(`move/${moveId}`);
+    return response.name;
+  }
 }
 
 module.exports = { PokeApi };
