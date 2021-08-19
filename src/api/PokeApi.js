@@ -14,7 +14,10 @@ class PokeApi extends RESTDataSource {
     const namesAndIds = response.results.map((pokemon) => {
       const id = parseUrl(pokemon.url);
       const name = pokemon.name;
-      return id;
+      return {
+        id,
+        name,
+      };
     });
 
     return namesAndIds;
