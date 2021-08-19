@@ -14,13 +14,24 @@ class PokeApi extends RESTDataSource {
     const namesAndIds = response.results.map((pokemon) => {
       const id = parseUrl(pokemon.url);
       const name = pokemon.name;
-      return {
-        id,
-        name,
-      };
+      return id;
     });
 
     return namesAndIds;
+  }
+
+  async getPokeIds(start, end) {
+    const response = await this.get(`pokemon?offset=${start}&limit=${end}`);
+
+    const ids = response.results.map((pokemon) => {
+      const id = parseUrl(pokemon.url);
+
+      return {
+        id,
+      };
+    });
+
+    return ids;
   }
 
   async getPokeSprites(id) {
@@ -28,7 +39,7 @@ class PokeApi extends RESTDataSource {
     return response.sprites;
   }
 
-  async getPokeIcon(id) {
+  async getBoxSprites(id) {
     const response = await this.get(`pokemon/${id}`);
     const version = response.sprites.versions["generation-viii"];
     const icons = version.icons;
@@ -131,9 +142,55 @@ class PokeApi extends RESTDataSource {
     return moveId;
   }
 
-  async getPokeMoveName(moveId) {
-    const response = await this.get(`move/${moveId}`);
+  async getPokeMoveName(lvlupMoveId) {
+    const response = await this.get(`move/${lvlupMoveId}`);
     return response.name;
+  }
+
+  async getPokeLevelUpMoveId(id) {
+    const response = await this.get(`pokemon/${id}`);
+    const move = response.moves;
+    const lvlupMoveId = move.map((move) => {
+      const id = parseUrl(move.move.url);
+      const version = move.version_group_details;
+
+      const methodName = version.find(
+        (data) => data.move_learn_method.name === "level-up"
+      );
+
+      return methodName ? id : null;
+    });
+    return lvlupMoveId ? lvlupMoveId : null;
+  }
+
+  async getPokeMovePower(lvlupMoveId) {
+    const response = await this.get(`move/${lvlupMoveId}`);
+    const power = response.power;
+    return power ? power : null;
+  }
+
+  async getPokeMoveAccuracy(lvlupMoveId) {
+    const response = await this.get(`move/${lvlupMoveId}`);
+
+    return response.accuracy;
+  }
+  async getPokeMovePP(lvlupMoveId) {
+    const response = await this.get(`move/${lvlupMoveId}`);
+
+    return response.pp;
+  }
+  async getPokeMoveType(lvlupMoveId) {
+    const response = await this.get(`move/${lvlupMoveId}`);
+    const moveType = response.type;
+    const name = moveType.name;
+    return name;
+  }
+
+  async getPokeMoveDamageClass(lvlupMoveId) {
+    const response = await this.get(`move/${lvlupMoveId}`);
+    const damageClass = response.damage_class;
+
+    return damageClass.name;
   }
 }
 

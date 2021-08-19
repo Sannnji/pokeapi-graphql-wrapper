@@ -5,7 +5,7 @@ const typeDefs = gql`
     hello: String!
     pokemonNamesAndIds(start: Int, end: Int): [NameAndIds]
     pokemon(id: Int): Pokemon
-    icons(id: Int): Icons
+    boxSprites(id: Int): BoxSprites
   }
 
   type Sprites {
@@ -13,9 +13,8 @@ const typeDefs = gql`
     front_shiny: String!
   }
 
-  type Icons {
+  type BoxSprites {
     front_default: String!
-    front_female: String!
   }
 
   type NameAndIds {
@@ -53,11 +52,11 @@ const typeDefs = gql`
   type Moves {
     id: Int!
     name: String!
-    power: Int!
-    accuracy: Int!
+    power: Int
+    accuracy: Int
     pp: Int!
     type: String!
-    damageClass: String
+    damageClass: String!
   }
 `;
 
