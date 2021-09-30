@@ -27,9 +27,9 @@ const typeDefs = gql`
     name: String!
     sprites: Sprites!
     type: [Type!]!
-    abilities: [Abilities!]!
+    abilities: [Abilities!]
     stats: Stats!
-    moves: [Moves]!
+    moves: [Moves]
   }
 
   type Type {
@@ -58,7 +58,7 @@ const typeDefs = gql`
     accuracy: Int
     pp: Int!
     type: String!
-    damage_class: String!
+    damage_class: String
   }
 `;
 

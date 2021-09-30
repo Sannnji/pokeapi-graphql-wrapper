@@ -82,7 +82,7 @@ class PokeApi extends RESTDataSource {
     return abilityName;
   }
 
-  async getAbilityEffect(abilityId) {
+  async getPokeAbilityEffect(abilityId) {
     const response = await this.get(`ability/${abilityId}`);
     const engEffect = response.effect_entries.find(
       (entry) => entry.language.name === "en"
@@ -92,6 +92,7 @@ class PokeApi extends RESTDataSource {
   }
 
   async getPokeBaseStats(id) {
+    const response = await this.get(`pokemon/${id}`);
     const hp = await this.getHitPointStat(id);
     const attack = await this.getAttackStat(id);
     const defense = await this.getDefenseStat(id);

@@ -45,10 +45,10 @@ const resolvers = {
   Abilities: {
     id: (parent, args, { dataSources }) => parent,
     name: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getAbilityName(parent);
+      return dataSources.pokeApi.getPokeAbilityName(parent);
     },
     effect: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getAbilityEffect(parent);
+      return dataSources.pokeApi.getPokeAbilityEffect(parent);
     },
   },
 
