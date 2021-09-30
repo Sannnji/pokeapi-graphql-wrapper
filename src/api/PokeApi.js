@@ -66,15 +66,32 @@ class PokeApi extends RESTDataSource {
     return typeName;
   }
 
-  async getPokeAbilities(id) {
+  async getPokeAbilityId(id) {
     const response = await this.get(`pokemon/${id}`);
     const abilities = response.abilities;
-    const abilityNames = abilities.map((ability) => ability.ability.name);
-    return abilityNames;
+    const abilityId = abilities.map((ability) => {
+      const id = parseUrl(ability.ability.url);
+      return id;
+    });
+    return abilityId;
+  }
+
+  async getPokeAbilityName(abilityId) {
+    const response = await this.get(`ability/${abilityId}`);
+    const abilityName = response.name;
+    return abilityName;
+  }
+
+  async getAbilityEffect(abilityId) {
+    const response = await this.get(`ability/${abilityId}`);
+    const engEffect = response.effect_entries.find(
+      (entry) => entry.language.name === "en"
+    );
+    const abilityEffect = engEffect.effect
+    return abilityEffect;
   }
 
   async getPokeBaseStats(id) {
-    const response = await this.get(`pokemon/${id}`);
     const hp = await this.getHitPointStat(id);
     const attack = await this.getAttackStat(id);
     const defense = await this.getDefenseStat(id);
@@ -145,11 +162,6 @@ class PokeApi extends RESTDataSource {
     return moveId;
   }
 
-  async getPokeMoveName(lvlupMoveId) {
-    const response = await this.get(`move/${lvlupMoveId}`);
-    return response.name;
-  }
-
   async getPokeLevelUpMoveId(id) {
     const response = await this.get(`pokemon/${id}`);
     const move = response.moves;
@@ -157,13 +169,18 @@ class PokeApi extends RESTDataSource {
       const id = parseUrl(move.move.url);
       const version = move.version_group_details;
 
-      const methodName = version.find(
+      const levelMethod = version.find(
         (data) => data.move_learn_method.name === "level-up"
       );
 
-      return methodName ? id : null;
+      return levelMethod ? id : null;
     });
     return lvlupMoveId ? lvlupMoveId : null;
+  }
+
+  async getPokeMoveName(lvlupMoveId) {
+    const response = await this.get(`move/${lvlupMoveId}`);
+    return response.name;
   }
 
   async getPokeMovePower(lvlupMoveId) {

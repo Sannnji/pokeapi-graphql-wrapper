@@ -37,7 +37,9 @@ const typeDefs = gql`
   }
 
   type Abilities {
+    id: Int!
     name: String!
+    effect: String!
   }
 
   type Stats {
@@ -56,7 +58,7 @@ const typeDefs = gql`
     accuracy: Int
     pp: Int!
     type: String!
-    damageClass: String!
+    damage_class: String!
   }
 `;
 

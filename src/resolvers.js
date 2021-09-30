@@ -28,7 +28,7 @@ const resolvers = {
       return dataSources.pokeApi.getPokeTypeId(parent);
     },
     abilities: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getPokeAbilities(parent);
+      return dataSources.pokeApi.getPokeAbilityId(parent);
     },
     stats: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeBaseStats(parent);
@@ -43,7 +43,13 @@ const resolvers = {
   },
 
   Abilities: {
-    name: (parent, args, { dataSources }) => parent,
+    id: (parent, args, { dataSources }) => parent,
+    name: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getAbilityName(parent);
+    },
+    effect: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getAbilityEffect(parent);
+    },
   },
 
   Moves: {
@@ -63,7 +69,7 @@ const resolvers = {
     type: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeMoveType(parent);
     },
-    damageClass: (parent, args, { dataSources }) => {
+    damage_class: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeMoveDamageClass(parent);
     },
   },
