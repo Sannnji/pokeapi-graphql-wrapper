@@ -4,6 +4,8 @@ const typeDefs = gql`
   type Query {
     hello: String!
     pokemonNamesAndIds(start: Int, end: Int): [NameAndIds]
+    generations: [NameAndIds]
+    pokemonByGeneration(gen: Int): [NameAndIds]
     pokemon(id: Int): Pokemon
     boxSprites(id: Int): BoxSprites
   }

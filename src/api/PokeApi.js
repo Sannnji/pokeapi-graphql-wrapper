@@ -23,6 +23,42 @@ class PokeApi extends RESTDataSource {
     return namesAndIds;
   }
 
+  async getGenerations() {
+    const response = await this.get("generation");
+
+    const generations = response.results;
+    return generations.map((gen) => {
+      const id = parseUrl(gen.url);
+      const name = gen.name.replace("generation", "gen");
+
+      return {
+        id,
+        name,
+      };
+    });
+  }
+
+  async getPokemonByGeneration(gen) {
+    const response = await this.get(`generation/${gen}`);
+
+    const pokemon = response.pokemon_species.map((pokemon) => {
+      const id = parseUrl(pokemon.url);
+      const name = pokemon.name;
+
+      return {
+        id,
+        name,
+      };
+    });
+    const sorted = pokemon.sort((a, b) => {
+      return a.id - b.id;
+    });
+
+    return sorted;
+  }
+
+  // POKE INFO QUERIES
+
   async getPokeIds(start, end) {
     const response = await this.get(`pokemon?offset=${start}&limit=${end}`);
 
@@ -87,7 +123,7 @@ class PokeApi extends RESTDataSource {
     const engEffect = response.effect_entries.find(
       (entry) => entry.language.name === "en"
     );
-    const abilityEffect = engEffect.effect
+    const abilityEffect = engEffect.effect;
     return abilityEffect;
   }
 

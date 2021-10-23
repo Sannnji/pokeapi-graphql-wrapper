@@ -2,13 +2,22 @@ const resolvers = {
   Query: {
     hello: () => "Hello World",
 
+    pokemon: (parent, args, { dataSources }) => {
+      return args.id;
+    },
+
+    pokemonByGeneration: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getPokemonByGeneration(args.gen);
+    },
+
     pokemonNamesAndIds: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getpokemonNamesAndIds(args.start, args.end);
     },
 
-    pokemon: (parent, args, { dataSources }) => {
-      return args.id;
+    generations: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getGenerations();
     },
+
     boxSprites: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getBoxSprites(args.id);
     },
