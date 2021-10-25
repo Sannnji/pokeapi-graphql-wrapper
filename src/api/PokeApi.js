@@ -26,7 +26,7 @@ class PokeApi extends RESTDataSource {
   async getTypes() {
     const response = await this.get("type");
 
-    return response.results.map((type) => {
+    const typeArr = response.results.map((type) => {
       const id = parseUrl(type.url);
       const name = type.name;
 
@@ -35,6 +35,10 @@ class PokeApi extends RESTDataSource {
         name,
       };
     });
+
+    typeArr.splice(18, 2);
+
+    return typeArr;
   }
 
   // POKE by filter
