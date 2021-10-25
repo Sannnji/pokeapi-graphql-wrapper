@@ -8,21 +8,6 @@ class PokeApi extends RESTDataSource {
     this.baseURL = "https://pokeapi.co/api/v2/";
   }
 
-  async getpokemonNamesAndIds(start, end) {
-    const response = await this.get(`pokemon?offset=${start}&limit=${end}`);
-
-    const namesAndIds = response.results.map((pokemon) => {
-      const id = parseUrl(pokemon.url);
-      const name = pokemon.name;
-      return {
-        id,
-        name,
-      };
-    });
-
-    return namesAndIds;
-  }
-
   async getGenerations() {
     const response = await this.get("generation");
 
@@ -38,6 +23,55 @@ class PokeApi extends RESTDataSource {
     });
   }
 
+  async getTypes() {
+    const response = await this.get("type");
+
+    return response.results.map((type) => {
+      const id = parseUrl(type.url);
+      const name = type.name;
+
+      return {
+        id,
+        name,
+      };
+    });
+  }
+
+  // POKE by filter
+
+  async getPokemonByFilter(gen, type) {
+    if (gen && type) {
+      const pokeByGen = await this.getPokemonByGeneration(gen);
+      const PokeByType = await this.getPokemonByType(type);
+
+      function filterIt(id) {
+        return PokeByType.find((pokemon) => {
+          return pokemon.id == id;
+        });
+      }
+
+      const filteredArr = pokeByGen.filter((pokemon) => filterIt(pokemon.id));
+
+      // const test = await Promise.all(
+      //   pokeByGen.map(async (pokemon) => {
+      //     const poke = await this.getPokemonById(pokemon.id);
+      //     const pokeTypes = poke.types.map((type) => type.type.name);
+      //     return {
+      //       id: poke.id,
+      //       name: poke.name,
+      //       type: pokeTypes,
+      //     };
+      //   })
+      // );
+      // const filtered = test.filter((pokemon) => pokemon.type.includes(type));
+
+      return filteredArr;
+    }
+
+    if (gen) return this.getPokemonByGeneration(gen);
+    if (type) return this.getPokemonByType(type);
+  }
+
   async getPokemonByGeneration(gen) {
     const response = await this.get(`generation/${gen}`);
 
@@ -50,14 +84,38 @@ class PokeApi extends RESTDataSource {
         name,
       };
     });
-    const sorted = pokemon.sort((a, b) => {
+    const sortedArr = pokemon.sort((a, b) => {
       return a.id - b.id;
     });
 
-    return sorted;
+    return sortedArr;
   }
 
-  // POKE INFO QUERIES
+  async getPokemonByType(type) {
+    const response = await this.get(`type/${type}`);
+
+    const pokemon = response.pokemon.map((pokemon) => {
+      const id = parseUrl(pokemon.pokemon.url);
+      const name = pokemon.pokemon.name;
+
+      return {
+        id,
+        name,
+      };
+    });
+
+    const sortedArr = pokemon.sort((a, b) => {
+      return a.id - b.id;
+    });
+
+    return sortedArr;
+  }
+
+  async getPokemonById(id) {
+    return await this.get(`pokemon/${id}`);
+  }
+
+  // POKE INFO
 
   async getPokeIds(start, end) {
     const response = await this.get(`pokemon?offset=${start}&limit=${end}`);
@@ -102,6 +160,8 @@ class PokeApi extends RESTDataSource {
     return typeName;
   }
 
+  // POKE ABILITY
+
   async getPokeAbilityId(id) {
     const response = await this.get(`pokemon/${id}`);
     const abilities = response.abilities;
@@ -126,6 +186,8 @@ class PokeApi extends RESTDataSource {
     const abilityEffect = engEffect.effect;
     return abilityEffect;
   }
+
+  // POKE STATS
 
   async getPokeBaseStats(id) {
     const response = await this.get(`pokemon/${id}`);
@@ -188,6 +250,8 @@ class PokeApi extends RESTDataSource {
     const speed = stats.find((stat) => stat.stat.name === "speed");
     return speed.base_stat;
   }
+
+  // POKE MOVES
 
   async getPokeMoveId(id) {
     const response = await this.get(`pokemon/${id}`);

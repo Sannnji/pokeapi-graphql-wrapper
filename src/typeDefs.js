@@ -2,10 +2,9 @@ const { gql } = require("apollo-server");
 
 const typeDefs = gql`
   type Query {
-    hello: String!
-    pokemonNamesAndIds(start: Int, end: Int): [NameAndIds]
     generations: [NameAndIds]
-    pokemonByGeneration(gen: Int): [NameAndIds]
+    types: [NameAndIds]
+    pokemonByFilter(gen: Int, type: String): [NameAndIds]
     pokemon(id: Int): Pokemon
     boxSprites(id: Int): BoxSprites
   }
