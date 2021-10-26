@@ -309,6 +309,8 @@ class PokeApi extends RESTDataSource {
   async getPokeEvolvesFrom(id) {
     // get pokemon species to access evolution details
     const species = await this.get(`pokemon-species/${id}`);
+    // get species id to pass as currentPoke
+    const speciesId = species.id
 
     // check if pokemon has prev evolution
     if (species.evolves_from_species === null) {
@@ -321,8 +323,8 @@ class PokeApi extends RESTDataSource {
 
       // get prev evolutions id
       const evolvesFrom = await this.getEvolvesFromPokeId(
-        // selected pokemons id
-        id,
+        // current pokemons id
+        speciesId,
         // evolution chain OBJ
         evolutionChain
       );
