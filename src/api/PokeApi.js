@@ -121,18 +121,14 @@ class PokeApi extends RESTDataSource {
 
   // POKE INFO
 
-  async getPokeIds(start, end) {
-    const response = await this.get(`pokemon?offset=${start}&limit=${end}`);
+  async getPokeId(id) {
+    const response = await this.get(`pokemon/${id}`);
+    return response.id;
+  }
 
-    const ids = response.results.map((pokemon) => {
-      const id = parseUrl(pokemon.url);
-
-      return {
-        id,
-      };
-    });
-
-    return ids;
+  async getPokeName(id) {
+    const response = await this.get(`pokemon/${id}`);
+    return response.name;
   }
 
   async getPokeSprites(id) {
@@ -147,17 +143,7 @@ class PokeApi extends RESTDataSource {
     return icons;
   }
 
-  async getPokeId(id) {
-    const response = await this.get(`pokemon/${id}`);
-    return response.id;
-  }
-
-  async getPokeName(id) {
-    const response = await this.get(`pokemon/${id}`);
-    return response.name;
-  }
-
-  async getPokeTypeId(id) {
+  async getPokeType(id) {
     const response = await this.get(`pokemon/${id}`);
     const types = response.types;
     const typeName = types.map((type) => type.type.name);
@@ -377,7 +363,7 @@ class PokeApi extends RESTDataSource {
   }
 
   async getEvolvesToPokeId(currentPoke, evolutionChainOBJ) {
-    let pokeId;
+    let pokeIdArr = [];
 
     // get evolutions Ids
     const FirstEvolId = parseUrl(evolutionChainOBJ.chain.species.url);
@@ -388,19 +374,17 @@ class PokeApi extends RESTDataSource {
       prop.evolves_to.map((prop) => parseUrl(prop.species.url))
     )[0];
 
-    console.log(ThirdEvolId);
-
     // if current pokemon is the first evolution
     if (currentPoke == FirstEvolId) {
       // return next evolutions Id
-      pokeId = SecondEvolId;
+      pokeIdArr = SecondEvolId;
       // if current pokemon is the second evolution
     } else if (currentPoke.toString() == SecondEvolId[0]) {
       // return next evolutions Id
-      pokeId = ThirdEvolId;
+      pokeIdArr = ThirdEvolId;
     } else return null;
 
-    return [pokeId];
+    return pokeIdArr;
   }
 }
 

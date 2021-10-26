@@ -32,7 +32,7 @@ const resolvers = {
       return dataSources.pokeApi.getPokeSprites(parent);
     },
     type: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getPokeTypeId(parent);
+      return dataSources.pokeApi.getPokeType(parent);
     },
     abilities: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeAbilityId(parent);
@@ -48,7 +48,7 @@ const resolvers = {
     },
     evolvesTo: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeEvolvesTo(parent);
-    }
+    },
   },
 
   Type: {
