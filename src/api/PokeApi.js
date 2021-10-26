@@ -317,6 +317,91 @@ class PokeApi extends RESTDataSource {
 
     return damageClass.name;
   }
+
+  // POKE EVOLUTION
+
+  async getPokeEvolvesFrom(id) {
+    // get pokemon species to access evolution details
+    const species = await this.get(`pokemon-species/${id}`);
+
+    // check if pokemon has prev evolution
+    if (species.evolves_from_species === null) {
+      return null;
+    } else {
+      // if so get evolution chain
+      const evolutionChain = await this.get(
+        `evolution-chain/${parseUrl(species.evolution_chain.url)}`
+      );
+
+      // get prev evolutions id
+      const evolvesFrom = await this.getEvolvesFromPokeId(
+        // selected pokemons id
+        id,
+        // evolution chain OBJ
+        evolutionChain
+      );
+
+      return evolvesFrom;
+    }
+  }
+
+  async getEvolvesFromPokeId(currentPoke, evolutionChainOBJ) {
+    let pokeId;
+
+    const SecondEvolId = evolutionChainOBJ.chain.evolves_to.map((prop) =>
+      parseUrl(prop.species.url)
+    );
+
+    if (SecondEvolId == currentPoke) {
+      pokeId = parseUrl(evolutionChainOBJ.chain.species.url);
+    } else {
+      pokeId = SecondEvolId;
+    }
+
+    return pokeId;
+  }
+
+  async getPokeEvolvesTo(id) {
+    // get pokemon species to access evolution details
+    const species = await this.get(`pokemon-species/${id}`);
+
+    // get pokemon evolution chain
+    const evolutionChain = await this.get(
+      `evolution-chain/${parseUrl(species.evolution_chain.url)}`
+    );
+
+    // get next evolutions pokeID
+    const evolvesTo = await this.getEvolvesToPokeId(id, evolutionChain);
+
+    return evolvesTo;
+  }
+
+  async getEvolvesToPokeId(currentPoke, evolutionChainOBJ) {
+    let pokeId;
+
+    // get evolutions Ids
+    const FirstEvolId = parseUrl(evolutionChainOBJ.chain.species.url);
+    const SecondEvolId = evolutionChainOBJ.chain.evolves_to.map((prop) =>
+      parseUrl(prop.species.url)
+    );
+    const ThirdEvolId = evolutionChainOBJ.chain.evolves_to.map((prop) =>
+      prop.evolves_to.map((prop) => parseUrl(prop.species.url))
+    )[0];
+
+    console.log(ThirdEvolId);
+
+    // if current pokemon is the first evolution
+    if (currentPoke == FirstEvolId) {
+      // return next evolutions Id
+      pokeId = SecondEvolId;
+      // if current pokemon is the second evolution
+    } else if (currentPoke.toString() == SecondEvolId[0]) {
+      // return next evolutions Id
+      pokeId = ThirdEvolId;
+    } else return null;
+
+    return [pokeId];
+  }
 }
 
 module.exports = { PokeApi };
