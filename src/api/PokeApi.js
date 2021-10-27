@@ -313,9 +313,7 @@ class PokeApi extends RESTDataSource {
     const speciesId = species.id;
 
     // check if pokemon has prev evolution
-    if (species.evolves_from_species === null) {
-      return null;
-    } else {
+    if (species.evolves_from_species) {
       // if so get evolution chain
       const evolutionChain = await this.get(
         `evolution-chain/${parseUrl(species.evolution_chain.url)}`
@@ -328,8 +326,9 @@ class PokeApi extends RESTDataSource {
         // evolution chain OBJ
         evolutionChain
       );
-
       return evolvesFrom;
+    } else {
+      return null;
     }
   }
 
@@ -340,9 +339,11 @@ class PokeApi extends RESTDataSource {
     const SecondEvolId = evolutionChainOBJ.chain.evolves_to.map((prop) =>
       parseUrl(prop.species.url)
     );
-
     // if current poke is a second evol
-    if (SecondEvolId == currentPoke) {
+    if (
+      SecondEvolId == currentPoke ||
+      SecondEvolId.includes(currentPoke.toString())
+    ) {
       // return first evol
       pokeId = parseUrl(evolutionChainOBJ.chain.species.url);
     } else {
@@ -350,7 +351,7 @@ class PokeApi extends RESTDataSource {
       pokeId = SecondEvolId;
     }
 
-    return pokeId;
+    return pokeId ? pokeId : null;
   }
 
   async getPokeEvolvesTo(id) {
@@ -391,7 +392,7 @@ class PokeApi extends RESTDataSource {
       // otherwise return null bc highest evol is third evol
     } else return null;
 
-    return pokeIdArr;
+    return pokeIdArr.length == 0 ? null : pokeIdArr;
   }
 }
 
