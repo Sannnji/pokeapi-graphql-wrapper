@@ -43,6 +43,12 @@ const resolvers = {
     moves: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeLevelUpMoveId(parent);
     },
+    evolutionRequirement: (parent, args, {dataSources}) => {
+      return dataSources.pokeApi.getEvolutionRequirment(parent);
+    } ,
+    evolutionTrigger: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getEvolutionTrigger(parent);
+    },
     evolvesFrom: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeEvolvesFrom(parent);
     },

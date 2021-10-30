@@ -31,6 +31,8 @@ const typeDefs = gql`
     abilities: [Abilities!]
     stats: Stats!
     moves: [Moves]
+    evolutionRequirement: [String]
+    evolutionTrigger: String
     evolvesFrom: Pokemon
     evolvesTo: [Pokemon]
   }

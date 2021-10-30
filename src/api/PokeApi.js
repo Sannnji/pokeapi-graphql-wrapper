@@ -394,6 +394,63 @@ class PokeApi extends RESTDataSource {
 
     return pokeIdArr.length == 0 ? null : pokeIdArr;
   }
+
+  async getCurrentPokeEvolutionOBJ(id) {
+    const species = await this.get(`pokemon-species/${id}`);
+
+    const evolutionChain = await this.get(
+      `evolution-chain/${parseUrl(species.evolution_chain.url)}`
+    );
+    let currentPoke;
+
+    evolutionChain.chain.evolves_to.forEach((pokemon) => {
+      pokemon.species.name == species.name
+        ? (currentPoke = pokemon)
+        : pokemon.evolves_to.forEach((pokemon) => {
+            pokemon.species.name == species.name
+              ? (currentPoke = pokemon)
+              : null;
+          });
+    });
+
+    return currentPoke;
+  }
+
+  async getEvolutionTrigger(id) {
+    const currentPoke = await this.getCurrentPokeEvolutionOBJ(id);
+
+    return currentPoke.evolution_details.map(
+      (method) => method.trigger.name
+    )[0];
+  }
+
+  async getEvolutionRequirment(id) {
+    const currentPoke = await this.getCurrentPokeEvolutionOBJ(id);
+
+    const evolutionDetails = currentPoke.evolution_details[0];
+
+    let reqs = [];
+
+    for (const prop in evolutionDetails) {
+      (evolutionDetails[prop] != null &&
+        evolutionDetails[prop] != "" &&
+        prop != "trigger") ||
+      evolutionDetails[prop] === 0
+        ? prop == "item" ||
+          prop == "held_item" ||
+          prop == "known_move" ||
+          prop == "location" ||
+          prop == "party-species" ||
+          prop == "known_move_type"
+          ? reqs.push(prop + " " + evolutionDetails[prop].name)
+          : reqs.push(evolutionDetails[prop])
+        : null;
+    }
+
+    reqs.includes(true || false) ? reqs.splice(1, 1, "rain") : null;
+
+    return reqs.length < 1 ? null : reqs;
+  }
 }
 
 module.exports = { PokeApi };
