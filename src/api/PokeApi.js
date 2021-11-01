@@ -419,37 +419,42 @@ class PokeApi extends RESTDataSource {
   async getEvolutionTrigger(id) {
     const currentPoke = await this.getCurrentPokeEvolutionOBJ(id);
 
-    return currentPoke.evolution_details.map(
-      (method) => method.trigger.name
-    )[0];
+    if (currentPoke) {
+      return currentPoke.evolution_details.map(
+        (method) => method.trigger.name
+      )[0];
+    } else return null;
   }
 
   async getEvolutionRequirment(id) {
-    const currentPoke = await this.getCurrentPokeEvolutionOBJ(id);
+    const species = await this.get(`pokemon-species/${id}`);
+    const currentPoke = await this.getCurrentPokeEvolutionOBJ(species.id);
 
-    const evolutionDetails = currentPoke.evolution_details[0];
+    if (currentPoke) {
+      const evolutionDetails = currentPoke.evolution_details[0];
 
-    let reqs = [];
+      let reqs = [];
 
-    for (const prop in evolutionDetails) {
-      (evolutionDetails[prop] != null &&
-        evolutionDetails[prop] != "" &&
-        prop != "trigger") ||
-      evolutionDetails[prop] === 0
-        ? prop == "item" ||
-          prop == "held_item" ||
-          prop == "known_move" ||
-          prop == "location" ||
-          prop == "party-species" ||
-          prop == "known_move_type"
-          ? reqs.push(prop + " " + evolutionDetails[prop].name)
-          : reqs.push(evolutionDetails[prop])
-        : null;
-    }
+      for (const prop in evolutionDetails) {
+        (evolutionDetails[prop] != null &&
+          evolutionDetails[prop] != "" &&
+          prop != "trigger") ||
+        evolutionDetails[prop] === 0
+          ? prop == "item" ||
+            prop == "held_item" ||
+            prop == "known_move" ||
+            prop == "location" ||
+            prop == "party-species" ||
+            prop == "known_move_type"
+            ? reqs.push(prop + " " + evolutionDetails[prop].name)
+            : reqs.push(evolutionDetails[prop])
+          : null;
+      }
 
-    reqs.includes(true || false) ? reqs.splice(1, 1, "rain") : null;
+      reqs.includes(true || false) ? reqs.splice(1, 1, "rain") : null;
 
-    return reqs.length < 1 ? null : reqs;
+      return reqs.length < 1 ? null : reqs;
+    } else return null;
   }
 }
 
