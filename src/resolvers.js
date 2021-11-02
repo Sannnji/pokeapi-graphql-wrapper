@@ -31,8 +31,8 @@ const resolvers = {
     flavorText: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeFlavorText(parent);
     },
-    genera: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getPokeGenera(parent);
+    genus: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getPokeGenus(parent);
     },
     sprites: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeSprites(parent);

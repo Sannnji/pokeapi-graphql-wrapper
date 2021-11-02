@@ -159,7 +159,7 @@ class PokeApi extends RESTDataSource {
     return textEntries[textEntries.length - 1].flavor_text;
   }
 
-  async getPokeGenera(id) {
+  async getPokeGenus(id) {
     const response = await this.get(`pokemon-species/${id}`);
 
     const genera = response.genera.filter(
