@@ -443,9 +443,10 @@ class PokeApi extends RESTDataSource {
           ? prop == "item" ||
             prop == "held_item" ||
             prop == "known_move" ||
-            prop == "location" ||
-            prop == "party-species" ||
-            prop == "known_move_type"
+            prop == "known_move_type" ||
+            prop == "party_species" ||
+            prop == "party_type" ||
+            prop == "location"
             ? reqs.push(prop + " " + evolutionDetails[prop].name)
             : reqs.push(evolutionDetails[prop])
           : null;
