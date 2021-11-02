@@ -150,6 +150,15 @@ class PokeApi extends RESTDataSource {
     return typeName;
   }
 
+  async getPokeFlavorText(id) {
+    const response = await this.get(`pokemon-species/${id}`);
+    const textEntries = response.flavor_text_entries.filter(
+      (entry) => entry.language.name == "en"
+    );
+
+    return textEntries[textEntries.length - 1].flavor_text;
+  }
+
   // POKE ABILITY
 
   async getPokeAbilityId(id) {

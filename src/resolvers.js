@@ -28,6 +28,9 @@ const resolvers = {
     name: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeName(parent);
     },
+    flavorText: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getPokeFlavorText(parent);
+    },
     sprites: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeSprites(parent);
     },
@@ -43,9 +46,9 @@ const resolvers = {
     moves: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeLevelUpMoveId(parent);
     },
-    evolutionRequirement: (parent, args, {dataSources}) => {
+    evolutionRequirement: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getEvolutionRequirment(parent);
-    } ,
+    },
     evolutionTrigger: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getEvolutionTrigger(parent);
     },

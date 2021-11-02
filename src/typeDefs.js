@@ -26,6 +26,7 @@ const typeDefs = gql`
   type Pokemon {
     id: Int!
     name: String!
+    flavorText: String!
     sprites: Sprites!
     type: [Type!]!
     abilities: [Abilities!]
