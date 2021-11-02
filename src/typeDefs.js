@@ -28,6 +28,7 @@ const typeDefs = gql`
     name: String!
     flavorText: String!
     genus: String!
+    height: Int!
     sprites: Sprites!
     type: [Type!]!
     abilities: [Abilities!]

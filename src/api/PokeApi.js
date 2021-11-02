@@ -169,6 +169,12 @@ class PokeApi extends RESTDataSource {
     return genera.genus;
   }
 
+  async getPokeHeight(id) {
+    const response = await this.get(`pokemon/${id}`);
+
+    return response.height;
+  }
+
   // POKE ABILITY
 
   async getPokeAbilityId(id) {

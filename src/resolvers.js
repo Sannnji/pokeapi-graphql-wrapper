@@ -34,6 +34,9 @@ const resolvers = {
     genus: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeGenus(parent);
     },
+    height: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getPokeHeight(parent);
+    },
     sprites: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeSprites(parent);
     },
