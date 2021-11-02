@@ -27,6 +27,7 @@ const typeDefs = gql`
     id: Int!
     name: String!
     flavorText: String!
+    genera: String!
     sprites: Sprites!
     type: [Type!]!
     abilities: [Abilities!]

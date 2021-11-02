@@ -31,6 +31,9 @@ const resolvers = {
     flavorText: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeFlavorText(parent);
     },
+    genera: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getPokeGenera(parent);
+    },
     sprites: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeSprites(parent);
     },
