@@ -33,7 +33,7 @@ const typeDefs = gql`
     type: [Type!]!
     abilities: [Abilities!]
     stats: Stats!
-    moves: [Moves]
+    moves(game: String!): [Moves]
     evolutionRequirement: [String]
     evolutionTrigger: String
     evolvesFrom: Pokemon
@@ -67,6 +67,13 @@ const typeDefs = gql`
     pp: Int!
     type: String!
     damage_class: String
+    learnMethods: [LearnMethod]
+  }
+
+  type LearnMethod {
+    method: String
+    level_learned_at: Int
+    game: String
   }
 `;
 

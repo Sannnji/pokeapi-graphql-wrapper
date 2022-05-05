@@ -278,55 +278,57 @@ class PokeApi extends RESTDataSource {
     return moveId;
   }
 
-  async getPokeLevelUpMoveId(id) {
-    const response = await this.get(`pokemon/${id}`);
-    const move = response.moves;
-    const lvlupMoveId = move.map((move) => {
-      const id = parseUrl(move.move.url);
-      const version = move.version_group_details;
-
-      const levelMethod = version.find(
-        (data) => data.move_learn_method.name === "level-up"
-      );
-
-      return levelMethod ? id : null;
-    });
-    return lvlupMoveId ? lvlupMoveId : null;
-  }
-
-  async getPokeMoveName(lvlupMoveId) {
-    const response = await this.get(`move/${lvlupMoveId}`);
+  async getPokeMoveName(moveId) {
+    const response = await this.get(`move/${moveId}`);
     return response.name;
   }
 
-  async getPokeMovePower(lvlupMoveId) {
-    const response = await this.get(`move/${lvlupMoveId}`);
+  async getPokeMovePower(moveId) {
+    const response = await this.get(`move/${moveId}`);
     const power = response.power;
     return power ? power : null;
   }
 
-  async getPokeMoveAccuracy(lvlupMoveId) {
-    const response = await this.get(`move/${lvlupMoveId}`);
+  async getPokeMoveAccuracy(moveId) {
+    const response = await this.get(`move/${moveId}`);
 
     return response.accuracy;
   }
-  async getPokeMovePP(lvlupMoveId) {
-    const response = await this.get(`move/${lvlupMoveId}`);
+  async getPokeMovePP(moveId) {
+    const response = await this.get(`move/${moveId}`);
 
     return response.pp;
   }
-  async getPokeMoveType(lvlupMoveId) {
-    const response = await this.get(`move/${lvlupMoveId}`);
+  async getPokeMoveType(moveId) {
+    const response = await this.get(`move/${moveId}`);
     const moveType = response.type;
     const name = moveType.name;
     return name;
   }
 
-  async getPokeMoveDamageClass(lvlupMoveId) {
-    const response = await this.get(`move/${lvlupMoveId}`);
+  async getPokeMoveDamageClass(moveId) {
+    const response = await this.get(`move/${moveId}`);
     const damageClass = response.damage_class;
 
     return damageClass.name;
+  }
+
+  async getPokeMoveLearnMethodByGame(id, moveId, game) {
+    const response = await this.get(`pokemon/${id}`);
+    const moves = response.moves;
+    const desiredMove = moves.find((move) => moveId == parseUrl(move.move.url));
+
+    const methodNames = desiredMove.version_group_details.map(
+      (game) => {return {
+        method: game.move_learn_method.name,
+        level_learned_at: game.level_learned_at || null,
+        game: game.version_group.name
+      }}
+    );
+
+    const learnMethodsByGame = methodNames.filter((method) => method.game == game)
+
+    return learnMethodsByGame ? learnMethodsByGame : null;
   }
 
   // POKE EVOLUTION

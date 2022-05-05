@@ -49,8 +49,19 @@ const resolvers = {
     stats: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeBaseStats(parent);
     },
-    moves: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getPokeLevelUpMoveId(parent);
+    moves: async (parent, args, { dataSources }) => {
+    const moveIds = await dataSources.pokeApi.getPokeMoveId(
+      parent
+    );
+    const pokemonAndMoveIds = moveIds.map((moveId) => {
+        return {
+            pokemonId: parent,
+            moveId: moveId,
+            game: args.game,
+        };
+    });
+
+    return pokemonAndMoveIds;
     },
     evolutionRequirement: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getEvolutionRequirment(parent);
@@ -81,25 +92,28 @@ const resolvers = {
   },
 
   Moves: {
-    id: (parent, arg, { dataSources }) => parent,
+    id: (parent, arg, { dataSources }) => parent.moveId,
     name: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getPokeMoveName(parent);
+      return dataSources.pokeApi.getPokeMoveName(parent.moveId);
     },
     power: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getPokeMovePower(parent);
+      return dataSources.pokeApi.getPokeMovePower(parent.moveId);
     },
     pp: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getPokeMovePP(parent);
+      return dataSources.pokeApi.getPokeMovePP(parent.moveId);
     },
     accuracy: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getPokeMoveAccuracy(parent);
+      return dataSources.pokeApi.getPokeMoveAccuracy(parent.moveId);
     },
     type: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getPokeMoveType(parent);
+      return dataSources.pokeApi.getPokeMoveType(parent.moveId);
     },
     damage_class: (parent, args, { dataSources }) => {
-      return dataSources.pokeApi.getPokeMoveDamageClass(parent);
+      return dataSources.pokeApi.getPokeMoveDamageClass(parent.moveId);
     },
+    learnMethods: (parent, args, {dataSources}) => {
+      return dataSources.pokeApi.getPokeMoveLearnMethodByGame(parent.pokemonId, parent.moveId, parent.game)
+    }
   },
 };
 
