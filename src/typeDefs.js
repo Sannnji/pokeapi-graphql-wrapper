@@ -68,10 +68,10 @@ const typeDefs = gql`
     pp: Int!
     type: String!
     damage_class: String
-    learnMethods: [LearnMethod]
+    learnMethods: [MoveLearnMethod]
   }
 
-  type LearnMethod {
+  type MoveLearnMethod {
     method: String
     level_learned_at: Int
     game: String
