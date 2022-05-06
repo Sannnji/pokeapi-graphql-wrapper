@@ -55,6 +55,14 @@ class PokeApi extends RESTDataSource {
     return versionGroups ? versionGroups : null;
   }
 
+  async getLearnMethodsByGame(game) {
+    const response = await this.get(`version-group/${game}`);
+
+    const methodsByGame = response.move_learn_methods.map((method) => method.name)
+
+    return methodsByGame
+  }
+
   // POKE by filter
 
   async getPokemonByFilter(gen, type) {

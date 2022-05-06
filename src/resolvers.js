@@ -23,6 +23,10 @@ const resolvers = {
     versionGroups: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getVersionGroups();
     },
+
+    learnMethodsByGame: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getLearnMethodsByGame(args.game);
+    },
   },
 
   Pokemon: {

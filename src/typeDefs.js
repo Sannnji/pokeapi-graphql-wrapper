@@ -8,6 +8,7 @@ const typeDefs = gql`
     types: [NameAndIds]
     boxSprites(id: Int): BoxSprites
     versionGroups: [VersionGroup]!
+    learnMethodsByGame(game: String!): [String]
   }
 
   type Sprites {
@@ -81,6 +82,7 @@ const typeDefs = gql`
     id: Int!
     name: String!
   }
+
 `;
 
 module.exports = { typeDefs };
