@@ -1,4 +1,5 @@
 const { RESTDataSource } = require("apollo-datasource-rest");
+const { version } = require("graphql");
 
 const { parseUrl } = require("../../utils/parseUrl");
 
@@ -39,6 +40,19 @@ class PokeApi extends RESTDataSource {
     typeArr.splice(18, 2);
 
     return typeArr;
+  }
+
+  async getVersionGroups() {
+    const response = await this.get("version-group");
+
+    const versionGroups = response.results.map((version) => {
+      return {
+        id: parseUrl(version.url),
+        name: version.name,
+      };
+    });
+
+    return versionGroups ? versionGroups : null;
   }
 
   // POKE by filter
@@ -318,15 +332,17 @@ class PokeApi extends RESTDataSource {
     const moves = response.moves;
     const desiredMove = moves.find((move) => moveId == parseUrl(move.move.url));
 
-    const methodNames = desiredMove.version_group_details.map(
-      (game) => {return {
+    const methodNames = desiredMove.version_group_details.map((game) => {
+      return {
         method: game.move_learn_method.name,
         level_learned_at: game.level_learned_at || null,
-        game: game.version_group.name
-      }}
-    );
+        game: game.version_group.name,
+      };
+    });
 
-    const learnMethodsByGame = methodNames.filter((method) => method.game == game)
+    const learnMethodsByGame = methodNames.filter(
+      (method) => method.game == game
+    );
 
     return learnMethodsByGame ? learnMethodsByGame : null;
   }
