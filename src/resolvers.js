@@ -19,6 +19,10 @@ const resolvers = {
     boxSprites: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getBoxSprites(args.id);
     },
+
+    versionGroups: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getVersionGroups();
+    },
   },
 
   Pokemon: {
@@ -50,18 +54,16 @@ const resolvers = {
       return dataSources.pokeApi.getPokeBaseStats(parent);
     },
     moves: async (parent, args, { dataSources }) => {
-    const moveIds = await dataSources.pokeApi.getPokeMoveId(
-      parent
-    );
-    const pokemonAndMoveIds = moveIds.map((moveId) => {
+      const moveIds = await dataSources.pokeApi.getPokeMoveId(parent);
+      const pokemonAndMoveIds = moveIds.map((moveId) => {
         return {
-            pokemonId: parent,
-            moveId: moveId,
-            game: args.game,
+          pokemonId: parent,
+          moveId: moveId,
+          game: args.game,
         };
-    });
+      });
 
-    return pokemonAndMoveIds;
+      return pokemonAndMoveIds;
     },
     evolutionRequirement: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getEvolutionRequirment(parent);
@@ -111,9 +113,18 @@ const resolvers = {
     damage_class: (parent, args, { dataSources }) => {
       return dataSources.pokeApi.getPokeMoveDamageClass(parent.moveId);
     },
-    learnMethods: (parent, args, {dataSources}) => {
-      return dataSources.pokeApi.getPokeMoveLearnMethodByGame(parent.pokemonId, parent.moveId, parent.game)
-    }
+    learnMethods: (parent, args, { dataSources }) => {
+      return dataSources.pokeApi.getPokeMoveLearnMethodByGame(
+        parent.pokemonId,
+        parent.moveId,
+        parent.game
+      );
+    },
+  },
+
+  VersionGroup: {
+    id: (parent, args, { dataSources }) => parent.id,
+    name: (parent, args, { dataSources }) => parent.name,
   },
 };
 
