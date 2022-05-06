@@ -7,6 +7,7 @@ const typeDefs = gql`
     generations: [NameAndIds]
     types: [NameAndIds]
     boxSprites(id: Int): BoxSprites
+    versionGroups: [VersionGroup]!
   }
 
   type Sprites {
@@ -74,6 +75,11 @@ const typeDefs = gql`
     method: String
     level_learned_at: Int
     game: String
+  }
+
+  type VersionGroup {
+    id: Int!
+    name: String!
   }
 `;
 
