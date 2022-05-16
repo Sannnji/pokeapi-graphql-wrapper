@@ -49,7 +49,7 @@ const typeDefs = gql`
   type Abilities {
     id: Int!
     name: String!
-    effect: String!
+    effect: String
   }
 
   type Stats {
