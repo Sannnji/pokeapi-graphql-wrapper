@@ -58,9 +58,11 @@ class PokeApi extends RESTDataSource {
   async getLearnMethodsByGame(game) {
     const response = await this.get(`version-group/${game}`);
 
-    const methodsByGame = response.move_learn_methods.map((method) => method.name)
+    const methodsByGame = response.move_learn_methods.map(
+      (method) => method.name
+    );
 
-    return methodsByGame
+    return methodsByGame;
   }
 
   // POKE by filter
@@ -217,11 +219,20 @@ class PokeApi extends RESTDataSource {
 
   async getPokeAbilityEffect(abilityId) {
     const response = await this.get(`ability/${abilityId}`);
-    const engEffect = response.effect_entries.find(
-      (entry) => entry.language.name === "en"
-    );
-    const abilityEffect = engEffect.effect;
-    return abilityEffect;
+
+    if (response.effect_entries.length > 0) {
+      const engEffect = response.effect_entries.find(
+        (entry) => entry.language.name === "en"
+      );
+      const abilityEffect = engEffect.effect;
+      return abilityEffect;
+    } else if (response.flavor_text_entries.length > 0) {
+      const engEffect = response.flavor_text_entries.find(
+        (entry) => entry.language.name === "en"
+      );
+      const abilityEffect = engEffect.flavor_text;
+      return abilityEffect;
+    } else return null;
   }
 
   // POKE STATS
